@@ -1,16 +1,27 @@
+import useLocalStorage from '@/lib/hooks/api/useLocalStorage'
 import { useLogin } from '@/lib/hooks/api/useLogin'
 import { AxiosError } from 'axios'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 type LoginInput = { email: string; password: string }
+type Token = { access_token: string; token_type: string }
 
 const LoginForm = () => {
+  const router = useRouter()
+  const { setAccessToken, clear } = useLocalStorage()
+
+  useEffect(() => {
+    clear()
+  }, [])
   const { mutate } = useLogin({
-    onSuccess: (res) => {
-      console.log(res)
+    onSuccess: (res: Token) => {
+      setAccessToken(res.access_token)
+      router.push({
+        pathname: '/home',
+      })
     },
     onError: (error: AxiosError) => {
-      //   console.log(error.code)
       if (error.code === 'ERR_BAD_REQUEST') {
         alert('メールアドレスかパスワードが間違っています。')
       }
@@ -43,7 +54,17 @@ const LoginForm = () => {
           mutate(input)
         }}
       >
-        submit
+        ログイン
+      </button>
+      <br />
+      <button
+        onClick={() =>
+          router.push({
+            pathname: '/register',
+          })
+        }
+      >
+        新規会員登録
       </button>
     </div>
   )
