@@ -1,5 +1,8 @@
+import { ProductItem } from '@/compornents/molecules/ProductItem'
+import { ProductItems } from '@/compornents/organism/ProductItems'
 import { useGetMe } from '@/lib/hooks/api/useGetMe'
 import useLocalStorage from '@/lib/hooks/api/useLocalStorage'
+import { Product } from '@/types/Product'
 import { useRouter } from 'next/router'
 import { useEffect, useLayoutEffect, useState } from 'react'
 type Me = {
@@ -22,9 +25,17 @@ export default function Home() {
     setUser(data)
   }, [])
 
+  const product: Product = {
+    id: 1,
+    price: 100,
+    name: '輪ゴム',
+    // thumbnail:
+    //'http://localhost:8000/storage/product/MXpVd2fLHIqJYfqZIaPq3ustKFE646ZU0zM7ShtQ.jpg',
+  }
   return (
     <div>
       <p>ようこそ！{data?.name}</p>
+      <ProductItems productList={[product]} />
     </div>
   )
 }
