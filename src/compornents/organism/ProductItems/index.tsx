@@ -5,6 +5,7 @@ import { FC } from 'react'
 
 const Conteiner = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 25px;
 `
 
@@ -20,7 +21,7 @@ export const ProductItems: FC<Props> = ({ productList }) => {
           key={elem.id}
           price={elem.price}
           name={elem.name}
-          imagePath={elem.thumbnail}
+          imageFileName={elem.thumbnail}
         />
       ))}
     </Conteiner>

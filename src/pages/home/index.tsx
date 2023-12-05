@@ -1,6 +1,7 @@
 import { ProductItem } from '@/compornents/molecules/ProductItem'
 import { ProductItems } from '@/compornents/organism/ProductItems'
 import { useGetMe } from '@/lib/hooks/api/useGetMe'
+import { useGetProductList } from '@/lib/hooks/api/useGetProduct'
 import useLocalStorage from '@/lib/hooks/api/useLocalStorage'
 import { Product } from '@/types/Product'
 import { useRouter } from 'next/router'
@@ -16,26 +17,27 @@ type Me = {
 
 export default function Home() {
   const { getAccessToken, setUser, removeItem } = useLocalStorage()
-  const { data, refetch } = useGetMe(getAccessToken() ?? '')
+
+  const accessToken = getAccessToken() ?? ''
+  // if (!accessToken) return
+
+  const { data: meData, refetch } = useGetMe(accessToken)
+  const { data: productDataList } = useGetProductList(accessToken)
+
+  console.log(productDataList)
   const router = useRouter()
 
   useLayoutEffect(() => {
     removeItem('me')
     refetch()
-    setUser(data)
+    setUser(meData)
   }, [])
 
-  const product: Product = {
-    id: 1,
-    price: 100,
-    name: '輪ゴム',
-    // thumbnail:
-    //'http://localhost:8000/storage/product/MXpVd2fLHIqJYfqZIaPq3ustKFE646ZU0zM7ShtQ.jpg',
-  }
   return (
     <div>
-      <p>ようこそ！{data?.name}</p>
-      <ProductItems productList={[product]} />
+      <p>ようこそ！{meData?.name} さん</p>
+      <br />
+      {productDataList && <ProductItems productList={productDataList} />}
     </div>
   )
 }

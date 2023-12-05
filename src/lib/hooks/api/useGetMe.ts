@@ -1,8 +1,5 @@
-import { useState, useEffect } from 'react'
 import axios from '@/lib/axiosInstance'
-import fetchBookList from './api'
 import { useQuery } from 'react-query'
-type Book = { title: string; author: string }
 type Me = {
   id: number
   name: string

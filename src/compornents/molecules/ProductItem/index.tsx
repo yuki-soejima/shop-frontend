@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import Image from 'next/image'
 import styled from 'styled-components'
+import { getImageFromStorage } from '@/lib/hooks/api/getImageFromStorage'
 
 type ProductItemProps = {
   price: number
@@ -9,32 +10,40 @@ type ProductItemProps = {
   height?: number
   imageWidth?: number
   imageHeight?: number
-  imagePath?: string
+  imageFileName?: string
 }
 export const ProductItem: FC<ProductItemProps> = ({
   price,
   name,
+  imageFileName,
   width = 200,
-  height = 400,
+  height = 250,
   imageWidth = 100,
   imageHeight = 100,
-  imagePath = '/assets/images/dummy/NoImage.jpeg',
 }) => {
   const ItemDiv = styled.div`
     width: ${width}px;
     height: ${height}px;
+    background: #949593;
+    padding: 10px;
   `
+  const ImageWrapper = styled.div`
+    text-align: center;
+  `
+  imageFileName = getImageFromStorage(imageFileName ?? '')
 
   return (
     <ItemDiv>
-      <Image
-        src={imagePath}
-        width={imageWidth}
-        height={imageHeight}
-        alt='商品イメージ'
-      />
-      <p>{name}</p>
-      <p>¥{price}</p>
+      <ImageWrapper>
+        <Image
+          src={imageFileName}
+          width={imageWidth}
+          height={imageHeight}
+          alt='商品イメージ'
+        />
+      </ImageWrapper>
+      <p>商品名：{name}</p>
+      <p>価格：¥{price}</p>
     </ItemDiv>
   )
 }
